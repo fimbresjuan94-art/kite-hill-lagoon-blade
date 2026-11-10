@@ -1,4 +1,5 @@
 import { dayKey, money, phoneKey, uid, when } from "./format";
+import { englishText, spanishText } from "./media";
 import { readCorralLang } from "./es";
 import type { Ctx, Estimate, Invoice, Job, LeadInput, Line, RidgeData, Task, Thread, WStep, Workflow } from "./types";
 
@@ -264,6 +265,26 @@ export function runOne(db: RidgeData, workflowId: string, ctx: Ctx, actor = "Baj
   return drain(log(next, `${actor} ran ${wf.name}`, "workflow"), actor);
 }
 
+export function lighten(db: RidgeData): RidgeData {
+  const clip = <T,>(rows: T[] | undefined, n: number) => (rows && rows.length > n ? rows.slice(0, n) : rows);
+  return {
+    ...db,
+    activity: clip(db.activity, 80) ?? [],
+    calls: clip(db.calls, 40) ?? [],
+    sessions: clip(db.sessions, 24) ?? [],
+    chatter: clip(db.chatter, 40) ?? [],
+    runs: clip(db.runs, 30) ?? [],
+    threads: db.threads.map((thread) =>
+      thread.messages.length > 40 ? { ...thread, messages: thread.messages.slice(-40) } : thread,
+    ),
+    jobs: db.jobs.map((job) => {
+      const photos = job.photos.length > 8 ? job.photos.slice(-8) : job.photos;
+      const videos = (job.videos ?? []).length > 4 ? job.videos!.slice(-4) : job.videos;
+      return photos === job.photos && videos === job.videos ? job : { ...job, photos, videos };
+    }),
+  };
+}
+
 export function sweep(db: RidgeData): RidgeData {
   const today = dayKey();
   if (db.settings.sweptOn === today) return drain(db);
@@ -402,7 +423,64 @@ export function createLead(db: RidgeData, input: LeadInput, actor = "Site"): Rid
     }
   }
   next = log(next, `${actor} captured ${input.name || "a lead"} from ${input.source}`, "lead");
+  if (input.visit) next = log(next, `Booked estimate for ${input.name || "this request"} goes to excavations@cdigs.bid`, "lead");
+  next = crewDesk(next, contactId!);
   return fire(next, "lead.created", { contactId, dealId: deal.id }, actor);
+}
+
+export function crewDesk(db: RidgeData, contactId: string): RidgeData {
+  const person = db.contacts.find((c) => c.id === contactId);
+  if (!person) return db;
+  const already = db.tasks.some((t) => t.contactId === contactId && t.title.startsWith("Call "));
+  let next = db;
+  if (!already) {
+    next = addTask(next, {
+      title: `Call ${person.name}`,
+      contactId,
+      ownerId: person.ownerId,
+      due: new Date().toISOString(),
+      payload: person.phone,
+    });
+  }
+  const thread = next.threads.find((t) => t.contactId === contactId);
+  const hasEs = thread?.messages.some((m) => m.body.toLowerCase().includes("podemos ver el terreno"));
+  if (!hasEs && person.phone) {
+    next = pushMessage(next, contactId, "out", "sms", spanishText(person.name));
+    next = pushMessage(next, contactId, "out", "sms", englishText(person.name));
+  }
+  return next;
+}
+
+export function bringEstimates(db: RidgeData): RidgeData {
+  const open = db.deals.filter(
+    (deal) =>
+      deal.stage !== "Won" &&
+      deal.stage !== "Lost" &&
+      !db.estimates.some((est) => est.contactId === deal.contactId && est.title === deal.title),
+  );
+  if (!open.length) return db;
+  let estimates = db.estimates;
+  let activity = db.activity;
+  const crew = ["Chente", "Chayo", "Neto", "Tavo"];
+  open.forEach((deal, index) => {
+    const who = crew[index % crew.length];
+    const est: Estimate = {
+      id: uid("e"),
+      number: `EST-${230 + estimates.length}`,
+      contactId: deal.contactId,
+      title: deal.title || "Site visit",
+      status: "draft",
+      options: packagesFor(db, deal.title || ""),
+      discount: 0,
+    };
+    estimates = [est, ...estimates];
+    const person = db.contacts.find((c) => c.id === deal.contactId);
+    activity = [
+      { id: uid("a"), at: new Date().toISOString(), text: `${who} wrote ${est.number} for ${person?.name || "a request"}`, kind: "money" },
+      ...activity,
+    ];
+  });
+  return { ...db, estimates, activity };
 }
 
 export function packagesFor(db: RidgeData, type: string) {
@@ -542,6 +620,7 @@ export function fileMonthlyReports(db: RidgeData): RidgeData {
           `Trabajos terminados ${finished}`,
           back === 0 ? `Llamadas abiertas ${calls}` : "Mes cerrado",
           "Solo números del libro.",
+          "Este mes va a jdurazo@cdigs.bid.",
         ].join("\n")
       : [
           label,
@@ -553,11 +632,35 @@ export function fileMonthlyReports(db: RidgeData): RidgeData {
           `Jobs finished ${finished}`,
           back === 0 ? `Calls still open ${calls}` : "Month closed",
           "Numbers from the book only.",
+          "This month goes to jdurazo@cdigs.bid.",
         ].join("\n");
     const msg = { id: `${id}_m`, dir: "in" as const, channel: "report", body, at: (closed ? end : now).toISOString() };
     const thread: Thread = { id, contactId: "", unread: existing?.unread ?? true, messages: [msg], title: `${label} report` };
     threads = existing ? threads.map((t) => (t.id === id ? { ...thread, unread: t.unread } : t)) : [thread, ...threads];
   }
+  return { ...db, threads };
+}
+
+export function fileWeeklyForManager(db: RidgeData): RidgeData {
+  const now = new Date();
+  const start = new Date(now);
+  start.setDate(now.getDate() - now.getDay());
+  const id = `wk_${start.getFullYear()}_${start.getMonth() + 1}_${start.getDate()}`;
+  const es = readCorralLang() === "es";
+  const openJobs = db.jobs.filter((job) => job.status !== "done" && job.status !== "invoiced").length;
+  const looks = db.appointments.filter((a) => new Date(a.start).getTime() >= start.getTime()).length;
+  const body = es
+    ? `Semana del ${start.toLocaleDateString("es-MX")}.\nTrabajos abiertos ${openJobs}.\nVisitas en el libro ${looks}.\nAdrian corre el trabajo. Esta semana va a adrian.man@cdigs.bid.`
+    : `Week of ${start.toLocaleDateString("en-US")}.\nOpen jobs ${openJobs}.\nVisits on the book ${looks}.\nAdrian runs the work. This week goes to adrian.man@cdigs.bid.`;
+  const existing = db.threads.find((t) => t.id === id);
+  const thread = {
+    id,
+    contactId: "",
+    unread: existing?.unread ?? true,
+    title: es ? "Semana de Adrian" : "Adrian's week",
+    messages: [{ id: `${id}_m`, dir: "in" as const, channel: "report", body, at: now.toISOString() }],
+  };
+  const threads = existing ? db.threads.map((t) => (t.id === id ? { ...thread, unread: t.unread } : t)) : [thread, ...db.threads];
   return { ...db, threads };
 }
 

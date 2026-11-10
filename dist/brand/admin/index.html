@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="color-scheme" content="dark">
+<title>Site Editor | CD Services LLC</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+<style>
+:root{--bg:#0E1013;--panel:#171B20;--panel2:#1E2329;--line:#3A424B;--ink:#F2F4F6;--mute:#B4BDC5;--yellow:#F6B91A;--yellow2:#FFD04D;--red:#FF9C85;--green:#8FE0A0;color-scheme:dark}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);font:400 1.0625rem/1.55 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;padding:0 max(16px,env(safe-area-inset-right)) 64px max(16px,env(safe-area-inset-left))}
+.wrap{max-width:62rem;margin:0 auto}
+header.top{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;justify-content:space-between;padding:20px 0;border-bottom:1px solid var(--line)}
+h1{font-size:1.6rem;line-height:1.15;letter-spacing:-.01em}
+h2{font-size:1.3rem;line-height:1.2;margin-bottom:6px}
+h3{font-size:1.05rem;margin:18px 0 8px}
+p.lead,.hint{color:var(--mute)}
+.hint{font-size:.95rem;margin-top:4px}
+.who{color:var(--mute);font-size:.95rem}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+a{color:var(--yellow2)}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid var(--yellow2);outline-offset:2px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:2.9rem;padding:0 20px;border-radius:10px;border:2px solid var(--yellow);background:var(--yellow);color:#14110A;font:700 1rem system-ui,sans-serif;cursor:pointer;text-decoration:none}
+.btn:hover{background:var(--yellow2);border-color:var(--yellow2)}
+.btn[disabled]{opacity:.55;cursor:default}
+.btn.ghost{background:transparent;color:var(--ink);border-color:#7B8791}
+.btn.ghost:hover{background:rgba(255,255,255,.08);border-color:#fff}
+.btn.danger{background:transparent;color:var(--red);border-color:var(--red)}
+.btn.danger:hover{background:rgba(255,156,133,.12)}
+.btn.sm{min-height:2.75rem;padding:0 14px;font-size:.95rem}
+section.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:clamp(16px,3vw,26px);margin-top:22px}
+label{display:block;font-weight:600;font-size:.95rem;margin-bottom:5px}
+input[type=text],input[type=tel],input[type=email],input[type=url],textarea{width:100%;min-height:2.9rem;padding:10px 12px;border-radius:10px;border:2px solid #7B8791;background:#0B0D10;color:var(--ink);font:inherit}
+textarea{min-height:5.5rem;resize:vertical}
+input:focus,textarea:focus{border-color:var(--yellow2)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 18px}
+.grid>*{min-width:0}
+@media(max-width:640px){.grid{grid-template-columns:minmax(0,1fr)}}
+.check{display:flex;gap:12px;align-items:center;min-height:2.9rem;font-weight:600;cursor:pointer}
+.check input{width:1.4rem;height:1.4rem;accent-color:var(--yellow)}
+.status{min-height:1.5em;margin-top:12px;font-weight:600}
+.status.ok{color:var(--green)}
+.status.bad{color:var(--red)}
+.drop{position:relative;display:block;border:2px dashed #7B8791;border-radius:14px;padding:22px;text-align:center;cursor:pointer;background:var(--panel2)}
+.drop.over{border-color:var(--yellow2);background:#262d35}
+.drop input{position:absolute;opacity:0;width:1px;height:1px}
+.drop:focus-within{outline:3px solid var(--yellow2);outline-offset:2px}
+.photos{list-style:none;display:grid;gap:14px;margin-top:12px}
+.ph{display:grid;grid-template-columns:7rem minmax(0,1fr);gap:14px;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--panel2);align-items:start}
+.ph img{width:7rem;height:7rem;object-fit:cover;border-radius:8px;background:#000}
+.ph .tools{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.ph.off img{opacity:.35}
+@media(max-width:480px){.ph{grid-template-columns:5rem minmax(0,1fr)}.ph img{width:5rem;height:5rem}}
+.tag{display:inline-block;font-size:.8rem;font-weight:700;padding:2px 8px;border-radius:99px;background:#2E353D;color:var(--ink);margin-bottom:6px}
+.err{color:var(--red);font-weight:600;margin-top:6px}
+.lang{min-height:2.75rem}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:absolute;left:12px;top:-4rem;background:var(--yellow2);color:#14110A;padding:10px 14px;border-radius:8px;font-weight:700;z-index:5}
+.skip:focus{top:12px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main" data-t="skip">Skip to the editor</a>
+<div class="wrap">
+<header class="top">
+  <div>
+    <h1 data-t="title">Site editor</h1>
+    <p class="who"><span data-t="signedin">Signed in as</span> <strong id="who">...</strong></p>
+  </div>
+  <div class="row">
+    <a class="btn ghost" href="/" target="_blank" rel="noopener"><span data-t="view">View the site</span><span class="sr" data-t="newtab"> (opens in a new tab)</span></a>
+    <button class="btn ghost lang" id="langBtn" type="button" aria-label="Cambiar idioma">Español</button>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+  <p class="lead" style="margin-top:18px" data-t="intro">Changes show on the public site within about a minute. Only you and the owner can open this page.</p>
+  <div id="banner" class="err" role="alert" hidden></div>
+
+  <section class="card" aria-labelledby="h-notice">
+    <h2 id="h-notice" data-t="h_notice">Notice at the top of the home page</h2>
+    <p class="hint" data-t="hint_notice">Use it for holiday hours, weather delays, or a special. Leave it off when you do not need it.</p>
+    <div style="margin-top:14px">
+      <label class="check"><input type="checkbox" id="noticeOn"><span data-t="notice_on">Show the notice</span></label>
+    </div>
+    <div class="grid" style="margin-top:8px">
+      <div><label for="noticeEn" data-t="notice_en">Notice in English</label><textarea id="noticeEn" maxlength="240"></textarea></div>
+      <div><label for="noticeEs" data-t="notice_es">Notice in Spanish (optional)</label><textarea id="noticeEs" maxlength="240"></textarea></div>
+    </div>
+    <div class="row" style="margin-top:14px"><button class="btn" type="button" id="saveNotice" data-t="save">Save</button></div>
+    <p class="status" id="stNotice" role="status"></p>
+  </section>
+
+  <section class="card" aria-labelledby="h-contact">
+    <h2 id="h-contact" data-t="h_contact">Phone numbers, emails and Facebook</h2>
+    <p class="hint" data-t="hint_contact">These change everywhere on the site, including the footer, the call buttons, and the privacy policy.</p>
+    <div class="grid" style="margin-top:14px">
+      <div><label for="phoneEn" data-t="phone_en">English phone line</label><input type="tel" id="phoneEn" inputmode="tel" autocomplete="off"></div>
+      <div><label for="phoneEs" data-t="phone_es">Spanish phone line (also used for WhatsApp)</label><input type="tel" id="phoneEs" inputmode="tel" autocomplete="off"></div>
+      <div><label for="email1" data-t="email1">Email 1</label><input type="email" id="email1" autocomplete="off" autocapitalize="off"></div>
+      <div><label for="email2" data-t="email2">Email 2</label><input type="email" id="email2" autocomplete="off" autocapitalize="off"></div>
+      <div><label for="email3" data-t="email3">Email 3</label><input type="email" id="email3" autocomplete="off" autocapitalize="off"></div>
+      <div><label for="facebook" data-t="facebook">Facebook page link</label><input type="url" id="facebook" autocomplete="off" autocapitalize="off"></div>
+    </div>
+    <div class="row" style="margin-top:14px"><button class="btn" type="button" id="saveContact" data-t="save">Save</button></div>
+    <p class="status" id="stContact" role="status"></p>
+  </section>
+
+  <section class="card" aria-labelledby="h-photos">
+    <h2 id="h-photos" data-t="h_photos">Photos in "Our work"</h2>
+    <p class="hint" data-t="hint_photos">New photos appear after the original ones. Each photo needs a short description. People who use screen readers hear it in place of the picture.</p>
+
+    <h3 data-t="add_photos">Add photos</h3>
+    <label class="drop" id="drop" for="file">
+      <input type="file" id="file" accept="image/jpeg,image/png,image/webp" multiple>
+      <strong data-t="drop_a">Choose photos</strong> <span data-t="drop_b">or drop them here</span>
+      <div class="hint" data-t="drop_c">JPG, PNG or WebP. They are resized for you.</div>
+    </label>
+    <ul class="photos" id="pending" aria-label="Photos ready to upload"></ul>
+    <div class="row" style="margin-top:12px"><button class="btn" type="button" id="uploadAll" hidden data-t="upload">Upload photos</button></div>
+    <p class="status" id="stUpload" role="status"></p>
+
+    <h3 data-t="added">Photos you added</h3>
+    <ul class="photos" id="extra" aria-label="Photos you added"></ul>
+    <p class="hint" id="noExtra" data-t="none_added">None yet.</p>
+
+    <h3 data-t="original">Original photos</h3>
+    <p class="hint" data-t="hint_original">Hide any you do not want shown. You can bring them back later.</p>
+    <ul class="photos" id="builtin" aria-label="Original photos"></ul>
+    <p class="status" id="stPhotos" role="status"></p>
+  </section>
+</main>
+</div>
+
+<script>
+(function(){
+var T={
+ en:{skip:'Skip to the editor',title:'Site editor',signedin:'Signed in as',view:'View the site',newtab:' (opens in a new tab)',
+  intro:'Changes show on the public site within about a minute. Only you and the owner can open this page.',
+  h_notice:'Notice at the top of the home page',hint_notice:'Use it for holiday hours, weather delays, or a special. Leave it off when you do not need it.',
+  notice_on:'Show the notice',notice_en:'Notice in English',notice_es:'Notice in Spanish (optional)',save:'Save',
+  h_contact:'Phone numbers, emails and Facebook',hint_contact:'These change everywhere on the site, including the footer, the call buttons, and the privacy policy.',
+  phone_en:'English phone line',phone_es:'Spanish phone line (also used for WhatsApp)',email1:'Email 1',email2:'Email 2',email3:'Email 3',facebook:'Facebook page link',
+  h_photos:'Photos in "Our work"',hint_photos:'New photos appear after the original ones. Each photo needs a short description. People who use screen readers hear it in place of the picture.',
+  add_photos:'Add photos',drop_a:'Choose photos',drop_b:'or drop them here',drop_c:'JPG, PNG or WebP. They are resized for you.',upload:'Upload photos',
+  added:'Photos you added',none_added:'None yet.',original:'Original photos',hint_original:'Hide any you do not want shown. You can bring them back later.',
+  saving:'Saving...',saved:'Saved. It shows on the site within about a minute.',failed:'That did not save.',
+  alt:'Describe this photo in a few words',up:'Move earlier',down:'Move later',remove:'Remove',hide:'Hide',show:'Show again',hidden:'Hidden',live:'Showing',
+  confirmq:'Remove this photo for good?',yes:'Yes, remove',no:'Keep it',need_alt:'Describe the photo first.',uploading:'Uploading...',uploaded:'Photos added. They show on the site within about a minute.',
+  photo:'Photo',orig:'Original photo',saveAlt:'Save description',notReady:'Saving is not connected yet. Finish step 4 in the START HERE guide.',expired:'Your sign-in ran out. Reload this page.',
+  bad_type:'That file is not a JPG, PNG or WebP photo.',lang:'Español',langLabel:'Cambiar idioma'},
+ es:{skip:'Saltar al editor',title:'Editor del sitio',signedin:'Sesión iniciada como',view:'Ver el sitio',newtab:' (se abre en otra pestaña)',
+  intro:'Los cambios se ven en el sitio en aproximadamente un minuto. Solo usted y el dueño pueden abrir esta página.',
+  h_notice:'Aviso en la parte de arriba del inicio',hint_notice:'Úselo para horarios de días festivos, retrasos por clima o una oferta. Déjelo apagado cuando no lo necesite.',
+  notice_on:'Mostrar el aviso',notice_en:'Aviso en inglés',notice_es:'Aviso en español (opcional)',save:'Guardar',
+  h_contact:'Teléfonos, correos y Facebook',hint_contact:'Estos cambian en todo el sitio, incluido el pie de página, los botones de llamada y la política de privacidad.',
+  phone_en:'Línea en inglés',phone_es:'Línea en español (también para WhatsApp)',email1:'Correo 1',email2:'Correo 2',email3:'Correo 3',facebook:'Enlace de la página de Facebook',
+  h_photos:'Fotos en "Nuestros trabajos"',hint_photos:'Las fotos nuevas aparecen después de las originales. Cada foto necesita una descripción corta. Las personas que usan lector de pantalla la escuchan en lugar de la imagen.',
+  add_photos:'Agregar fotos',drop_a:'Elegir fotos',drop_b:'o suéltelas aquí',drop_c:'JPG, PNG o WebP. Se ajustan de tamaño solas.',upload:'Subir fotos',
+  added:'Fotos que usted agregó',none_added:'Todavía ninguna.',original:'Fotos originales',hint_original:'Oculte las que no quiera mostrar. Puede volver a mostrarlas después.',
+  saving:'Guardando...',saved:'Guardado. Se ve en el sitio en aproximadamente un minuto.',failed:'No se guardó.',
+  alt:'Describa esta foto en pocas palabras',up:'Subir',down:'Bajar',remove:'Quitar',hide:'Ocultar',show:'Mostrar otra vez',hidden:'Oculta',live:'Visible',
+  confirmq:'¿Quitar esta foto para siempre?',yes:'Sí, quitar',no:'Conservar',need_alt:'Primero describa la foto.',uploading:'Subiendo...',uploaded:'Fotos agregadas. Se ven en el sitio en aproximadamente un minuto.',
+  photo:'Foto',orig:'Foto original',saveAlt:'Guardar descripción',notReady:'Todavía no se conecta el guardado. Termine el paso 4 de la guía EMPIECE AQUÍ.',expired:'Se acabó su sesión. Recargue esta página.',
+  bad_type:'Ese archivo no es una foto JPG, PNG o WebP.',lang:'English',langLabel:'Change language'}
+};
+var lang='en';try{if(localStorage.getItem('cds-admin-lang')==='es')lang='es'}catch(e){}
+var $=function(s){return document.querySelector(s)};
+var t=function(k){return T[lang][k]||T.en[k]||k};
+var C=null,builtin=10,pending=[];
+
+function applyLang(){
+ document.documentElement.lang=lang;
+ [].forEach.call(document.querySelectorAll('[data-t]'),function(el){el.textContent=t(el.getAttribute('data-t'))});
+ var b=$('#langBtn');b.textContent=t('lang');b.setAttribute('aria-label',t('langLabel'));b.setAttribute('lang',lang==='en'?'es':'en');
+ document.title=t('title')+' | CD Services LLC';
+ if(C){renderExtra();renderBuiltin();renderPending()}
+}
+$('#langBtn').addEventListener('click',function(){lang=lang==='en'?'es':'en';try{localStorage.setItem('cds-admin-lang',lang)}catch(e){}applyLang()});
+
+function say(id,msg,kind){var el=$(id);el.textContent=msg||'';el.className='status'+(kind?' '+kind:'')}
+function banner(msg){var b=$('#banner');if(msg){b.textContent=msg;b.hidden=false}else b.hidden=true}
+
+function api(path,opts){
+ opts=opts||{};opts.credentials='same-origin';opts.headers=Object.assign({'Accept':'application/json'},opts.headers||{});
+ return fetch('/api/admin/'+path,opts).then(function(r){
+  return r.text().then(function(txt){
+   var data=null;try{data=JSON.parse(txt)}catch(e){}
+   if(r.status===401||r.status===403){var e1=new Error(t('expired'));e1.auth=true;throw e1}
+   if(!r.ok){throw new Error((data&&data.error)||txt||t('failed'))}
+   return data;
+  });
+ });
+}
+function fail(id,e){say(id,e&&e.message?e.message:t('failed'),'bad');if(e&&e.auth)banner(t('expired'))}
+
+function fillForms(){
+ $('#noticeOn').checked=!!C.notice.on;$('#noticeEn').value=C.notice.en||'';$('#noticeEs').value=C.notice.es||'';
+ ['phoneEn','phoneEs','email1','email2','email3','facebook'].forEach(function(k){$('#'+k).value=C.site[k]||''});
+}
+
+/* ---- notice + contact ---- */
+$('#saveNotice').addEventListener('click',function(){
+ say('#stNotice',t('saving'));
+ api('content',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({notice:{on:$('#noticeOn').checked,en:$('#noticeEn').value,es:$('#noticeEs').value}})})
+ .then(function(d){C=d;say('#stNotice',t('saved'),'ok')}).catch(function(e){fail('#stNotice',e)});
+});
+$('#saveContact').addEventListener('click',function(){
+ say('#stContact',t('saving'));
+ var s={};['phoneEn','phoneEs','email1','email2','email3','facebook'].forEach(function(k){s[k]=$('#'+k).value});
+ api('content',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({site:s})})
+ .then(function(d){C=d;fillForms();say('#stContact',t('saved'),'ok')}).catch(function(e){fail('#stContact',e)});
+});
+
+/* ---- photos ---- */
+function saveGallery(){
+ say('#stPhotos',t('saving'));
+ return api('content',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({gallery:C.gallery})})
+ .then(function(d){C=d;renderExtra();renderBuiltin();say('#stPhotos',t('saved'),'ok')}).catch(function(e){fail('#stPhotos',e)});
+}
+function li(cls){var l=document.createElement('li');l.className=cls||'ph';return l}
+function mkBtn(label,cls,fn){var b=document.createElement('button');b.type='button';b.className='btn sm '+(cls||'ghost');b.textContent=label;b.addEventListener('click',fn);return b}
+
+function renderBuiltin(){
+ var ul=$('#builtin');ul.innerHTML='';
+ for(var i=1;i<=builtin;i++){(function(n){
+  var off=C.gallery.hidden.indexOf(n)>-1,l=li('ph'+(off?' off':''));
+  var img=document.createElement('img');img.src='/img/gallery-'+(n<10?'0':'')+n+'.jpg';img.alt='';
+  var box=document.createElement('div');
+  var tag=document.createElement('span');tag.className='tag';tag.textContent=t('orig')+' '+n+' · '+(off?t('hidden'):t('live'));
+  var tools=document.createElement('div');tools.className='tools';
+  tools.appendChild(mkBtn(off?t('show'):t('hide'),'ghost',function(){
+   var h=C.gallery.hidden.slice(),ix=h.indexOf(n);if(ix>-1)h.splice(ix,1);else h.push(n);C.gallery.hidden=h;saveGallery();
+  }));
+  box.appendChild(tag);box.appendChild(tools);l.appendChild(img);l.appendChild(box);ul.appendChild(l);
+ })(i)}
+}
+
+function renderExtra(){
+ var ul=$('#extra');ul.innerHTML='';
+ var list=C.gallery.extra;$('#noExtra').hidden=list.length>0;
+ list.forEach(function(x,i){
+  var l=li('ph');
+  var img=document.createElement('img');img.src='/u/'+x.id;img.alt='';
+  var box=document.createElement('div');
+  var id='alt-'+x.id;
+  var lab=document.createElement('label');lab.htmlFor=id;lab.textContent=t('alt');
+  var inp=document.createElement('input');inp.type='text';inp.id=id;inp.value=x.alt;inp.maxLength=200;
+  var tools=document.createElement('div');tools.className='tools';
+  tools.appendChild(mkBtn(t('saveAlt'),'ghost',function(){
+   if(!inp.value.trim()){say('#stPhotos',t('need_alt'),'bad');inp.focus();return}
+   x.alt=inp.value.trim();saveGallery();
+  }));
+  var up=mkBtn('↑ '+t('up'),'ghost',function(){if(i>0){var a=list[i-1];list[i-1]=list[i];list[i]=a;saveGallery()}});up.disabled=i===0;
+  var dn=mkBtn('↓ '+t('down'),'ghost',function(){if(i<list.length-1){var a=list[i+1];list[i+1]=list[i];list[i]=a;saveGallery()}});dn.disabled=i===list.length-1;
+  tools.appendChild(up);tools.appendChild(dn);
+  var rm=mkBtn(t('remove'),'danger',function(){
+   tools.innerHTML='';
+   var q=document.createElement('span');q.textContent=t('confirmq')+' ';q.style.fontWeight='600';
+   tools.appendChild(q);
+   tools.appendChild(mkBtn(t('yes'),'danger',function(){C.gallery.extra=list.filter(function(y){return y.id!==x.id});saveGallery()}));
+   tools.appendChild(mkBtn(t('no'),'ghost',function(){renderExtra()}));
+  });
+  tools.appendChild(rm);
+  box.appendChild(lab);box.appendChild(inp);box.appendChild(tools);l.appendChild(img);l.appendChild(box);ul.appendChild(l);
+ });
+}
+
+/* resize in the browser so phone photos upload fast */
+function shrink(file){
+ return new Promise(function(res,rej){
+  var url=URL.createObjectURL(file),img=new Image();
+  img.onload=function(){
+   var max=1600,w=img.naturalWidth,h=img.naturalHeight,k=Math.min(1,max/Math.max(w,h));
+   var cw=Math.round(w*k),ch=Math.round(h*k),cv=document.createElement('canvas');cv.width=cw;cv.height=ch;
+   var cx=cv.getContext('2d');cx.fillStyle='#fff';cx.fillRect(0,0,cw,ch);cx.drawImage(img,0,0,cw,ch);
+   cv.toBlob(function(b){URL.revokeObjectURL(url);b?res({blob:b,w:cw,h:ch}):rej(new Error(t('bad_type')))},'image/jpeg',0.86);
+  };
+  img.onerror=function(){URL.revokeObjectURL(url);rej(new Error(t('bad_type')))};
+  img.src=url;
+ });
+}
+function addFiles(files){
+ [].forEach.call(files,function(f){
+  if(!/^image\/(jpeg|png|webp)$/.test(f.type)){say('#stUpload',t('bad_type'),'bad');return}
+  pending.push({file:f,url:URL.createObjectURL(f),alt:''});
+ });
+ renderPending();
+}
+function renderPending(){
+ var ul=$('#pending');ul.innerHTML='';
+ pending.forEach(function(p,i){
+  var l=li('ph');
+  var img=document.createElement('img');img.src=p.url;img.alt='';
+  var box=document.createElement('div');
+  var id='pend-'+i;
+  var lab=document.createElement('label');lab.htmlFor=id;lab.textContent=t('alt');
+  var inp=document.createElement('input');inp.type='text';inp.id=id;inp.value=p.alt;inp.maxLength=200;
+  inp.addEventListener('input',function(){p.alt=inp.value});
+  var tools=document.createElement('div');tools.className='tools';
+  tools.appendChild(mkBtn(t('remove'),'danger',function(){URL.revokeObjectURL(p.url);pending.splice(i,1);renderPending()}));
+  box.appendChild(lab);box.appendChild(inp);box.appendChild(tools);l.appendChild(img);l.appendChild(box);ul.appendChild(l);
+ });
+ $('#uploadAll').hidden=pending.length===0;
+}
+$('#file').addEventListener('change',function(e){addFiles(e.target.files);e.target.value=''});
+var drop=$('#drop');
+['dragenter','dragover'].forEach(function(n){drop.addEventListener(n,function(e){e.preventDefault();drop.classList.add('over')})});
+['dragleave','drop'].forEach(function(n){drop.addEventListener(n,function(e){e.preventDefault();drop.classList.remove('over')})});
+drop.addEventListener('drop',function(e){if(e.dataTransfer&&e.dataTransfer.files)addFiles(e.dataTransfer.files)});
+
+$('#uploadAll').addEventListener('click',function(){
+ var missing=pending.findIndex(function(p){return !p.alt.trim()});
+ if(missing>-1){say('#stUpload',t('need_alt'),'bad');var f=document.getElementById('pend-'+missing);if(f)f.focus();return}
+ var btn=this;btn.disabled=true;say('#stUpload',t('uploading'));
+ var chain=Promise.resolve();
+ pending.slice().forEach(function(p){
+  chain=chain.then(function(){return shrink(p.file)}).then(function(r){
+   return api('upload?alt='+encodeURIComponent(p.alt.trim())+'&w='+r.w+'&h='+r.h,{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:r.blob});
+  }).then(function(item){C.gallery.extra.push(item);URL.revokeObjectURL(p.url);pending.splice(pending.indexOf(p),1);renderPending();renderExtra()});
+ });
+ chain.then(function(){say('#stUpload',t('uploaded'),'ok')}).catch(function(e){fail('#stUpload',e)}).then(function(){btn.disabled=false});
+});
+
+/* ---- start ---- */
+applyLang();
+api('me').then(function(me){
+ $('#who').textContent=me.email;builtin=me.builtin||10;
+ if(!me.storage){banner(t('notReady'))}
+ return api('content');
+}).then(function(d){C=d;fillForms();renderExtra();renderBuiltin();renderPending()}).catch(function(e){
+ banner(e&&e.message?e.message:t('failed'));
+ C=C||{notice:{on:false,en:'',es:''},site:{},gallery:{hidden:[],extra:[]}};fillForms();renderExtra();renderBuiltin();
+});
+})();
+</script>
+</body>
+</html>

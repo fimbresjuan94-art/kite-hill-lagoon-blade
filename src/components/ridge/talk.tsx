@@ -1,4 +1,5 @@
 import { EstimateWeek } from "@/components/ridge/close";
+import { Reach } from "@/components/ridge/fieldops";
 import { Area, Btn, Card, Field, Input, Page, Pill, Select, usePlain } from "@/components/ridge/ui";
 import { rioDraft } from "@/lib/ridge/engine";
 import { money, when } from "@/lib/ridge/format";
@@ -93,7 +94,12 @@ export function Calls() {
         <Btn tone="quiet" onClick={() => add(contactId, "answered", notes)}>Answered</Btn>
         <Btn tone="ghost" onClick={() => add(contactId, "voicemail", notes)}>Drop VM</Btn>
       </Card>
-      <p className="mb-3 text-sm text-mist">A missed call runs the text-back line. A voicemail drop lands in the inbox. The carrier is not connected yet.</p>
+      <p className="mb-3 text-sm text-mist">Call opens the phone. Text opens Messages with the words already written. Spanish is Chayo. English is Neto. Chente is the call.</p>
+      {data.contacts.find((c) => c.id === contactId) ? (
+        <div className="mb-3">
+          <Reach name={data.contacts.find((c) => c.id === contactId)?.name || ""} phone={data.contacts.find((c) => c.id === contactId)?.phone || ""} />
+        </div>
+      ) : null}
       <div className="space-y-2">
         {data.calls.map((call) => (
           <Card key={call.id} className="flex flex-wrap items-center justify-between gap-2">
@@ -118,7 +124,7 @@ export function Campaigns() {
     <Page kicker="Marketing" title="Email and ads">
       <Card>
         <p className="font-display text-2xl">Letters sitting in Gmail</p>
-        <p className="mt-2 text-sm text-mist">Two drafts are in estimates.carranzadig@gmail.com. They are not sent. Open Drafts and send the ones you want.</p>
+        <p className="mt-2 text-sm text-mist">Booked estimates go to excavations@cdigs.bid. The month goes to jdurazo@cdigs.bid. The week goes to adrian.man@cdigs.bid.</p>
         <ul className="mt-3 space-y-2 text-sm">
           <li>Innovative Custom Pools, admin@icpoolsaz.com. Dirt crew for their pool builds.</li>
           <li>Arizona Pool Builders, poolbuilders.az@gmail.com. Excavation help for their pool jobs.</li>

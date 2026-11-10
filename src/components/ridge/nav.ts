@@ -132,7 +132,6 @@ const AUTO: ModuleId[] = [
   "sequences",
   "reports",
   "coverage",
-  "team",
   "settings",
 ];
 
@@ -146,7 +145,9 @@ export function allowed(_role: string | undefined, id: string) {
 
 export function canWrite(role: string | undefined, id: string) {
   if (role === "developer") return true;
+  if (id === "team") return role === "owner" || role === "manager";
   if (AUTO.includes(id as ModuleId)) return false;
   if (role === "operator") return CREW_WRITE.includes(id as ModuleId);
-  return true;
+  if (role === "owner" || role === "manager") return true;
+  return false;
 }

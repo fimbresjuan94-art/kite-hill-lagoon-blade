@@ -22,7 +22,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"HomeAndConstructionBusiness","name":"CD Services LLC","alternateName":"CDS","url":"https://cdigs.bid/","image":"https://cdigs.bid/img/og.jpg","telephone":"+1-480-989-5802","email":"estimates.carranzadig@gmail.com","areaServed":["Phoenix, AZ","Scottsdale, AZ","Mesa, AZ","Tempe, AZ","Glendale, AZ","Peoria, AZ","Goodyear, AZ","Avondale, AZ","Tolleson, AZ","Maricopa, AZ"],"description":"Excavation, grading, trenching, footings, demolition, tree removal and dirt removal across the Phoenix valley.","knowsAbout":["Excavation","Grading","Trenching","Footings","Post holes","Demolition","Concrete removal","Tree removal","Land clearing","Dirt removal"]}
+{"@context":"https://schema.org","@type":"HomeAndConstructionBusiness","name":"CD Services LLC","alternateName":"CDS","url":"https://cdigs.bid/","image":"https://cdigs.bid/img/og.jpg","telephone":"+1-480-989-5802","email":"info@cdigs.bid","areaServed":["Phoenix, AZ","Scottsdale, AZ","Mesa, AZ","Tempe, AZ","Glendale, AZ","Peoria, AZ","Goodyear, AZ","Avondale, AZ","Tolleson, AZ","Maricopa, AZ"],"description":"Excavation, grading, trenching, footings, demolition, tree removal and dirt removal across the Phoenix valley.","knowsAbout":["Excavation","Grading","Trenching","Footings","Post holes","Demolition","Concrete removal","Tree removal","Land clearing","Dirt removal"]}
 </script>
 <style>
 :root{--black:#0E1013;--char:#15181C;--char2:#1E2328;--yellow:#F6B91A;--yellow2:#FFD04D;--orange:#E5532D;--ink:#14181C;--mute:#566069;--off:#F3F4F5;--line:#DDE1E4;--line-d:rgba(255,255,255,.14);--mute-d:#A9B2BA;--r:10px}
@@ -1442,7 +1442,17 @@ if(p.ts>0&&p.ts<4)h.style.fontSize=sz[p.ts]+'%';}catch(e){}})();</script>
 @keyframes corral-gate{0%,100%{transform:rotate(0)}50%{transform:rotate(-16deg)}}
 @media(max-width:900px){.yard-door{bottom:calc(76px + env(safe-area-inset-bottom))}}
 @media(prefers-reduced-motion:reduce){.yard-door .gate{animation:none}}
-.hero{background:linear-gradient(90deg,#0E1013 0%,rgba(14,16,19,.92) 36%,rgba(14,16,19,.35) 62%,rgba(14,16,19,.12) 100%),url(img/estrella.jpg) right center/cover no-repeat,#0E1013 !important}
+.hero .kick,.hero .kick span{color:#fff !important;text-shadow:0 1px 2px rgba(0,0,0,.9),0 2px 14px rgba(0,0,0,.75)}
+.hero .co{color:#F6B91A !important;font-size:clamp(1.6rem,3.4vw,2.2rem) !important;font-weight:800 !important;text-shadow:0 2px 12px rgba(0,0,0,.85)}
+.hero p.lead{color:#fff !important;font-weight:700 !important;line-height:1.45 !important;text-shadow:0 1px 2px rgba(0,0,0,.95),0 2px 18px rgba(0,0,0,.8)}
+.toplines{display:flex;flex-direction:column;gap:1px;line-height:1.15}
+.toplines a{color:#fff;text-decoration:none;font-weight:750;font-size:.72rem;white-space:nowrap}
+.toplines b{color:#F6B91A;font-size:.62rem;margin-right:4px}
+.fb-top{color:#fff;text-decoration:none;font-weight:800;font-size:.78rem;border:1px solid rgba(255,255,255,.4);border-radius:999px;padding:6px 10px;min-height:32px;display:inline-flex;align-items:center}
+.contact a .k,.fl a .k{color:#F6B91A;font-weight:800;margin-right:6px}
+.jobsite-sign{margin:0 0 14px;background:#F6B91A;color:#14110A;text-align:center;font:800 clamp(1.8rem,6vw,3.2rem) Archivo,sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:16px 12px;border-radius:12px;box-shadow:0 8px 0 #8a5a10}
+.cds-pause #scenery *,.cds-lean #scenery *{animation:none !important}
+.cds-lean #scenery .scn-l,.cds-lean #scenery .scn-sun{will-change:auto}
 @media(max-width:900px){.hero{background:linear-gradient(180deg,rgba(14,16,19,.2),rgba(14,16,19,.82) 78%),url(img/estrella.jpg) center 30%/cover no-repeat,#0E1013 !important;padding-top:92px !important}.nav{padding:0}.mbar{padding:8px 12px calc(8px + env(safe-area-inset-bottom)) !important}}
 #scenery .scn-sun{position:absolute;left:68%;top:42%;width:46vmin;height:46vmin;margin:-23vmin 0 0 -23vmin;border-radius:50%;background:radial-gradient(circle,var(--c-sun) 0,var(--c-sun) 14%,rgba(255,190,110,.35) 32%,transparent 68%);will-change:transform}
 #scenery .scn-l{position:absolute;left:0;top:0;width:100%;will-change:transform}
@@ -1527,7 +1537,11 @@ body .sec.off{background-image:none!important}
   <li><a href="#faq" data-es="Preguntas">Questions</a></li>
  </ul></nav>
  <div class="acts">
-  <a class="navtel" id="navTel" href="#" hidden></a>
+  <span class="toplines">
+   <a href="tel:+14809895802"><b>EN</b>(480) 989-5802</a>
+   <a href="tel:+16235221923"><b>ES</b>(623) 522-1923</a>
+  </span>
+  <a class="fb-top" href="https://www.facebook.com/profile.php?id=100064277851753" target="_blank" rel="noopener noreferrer">Facebook</a>
   <span class="langpair"><button class="langbtn" type="button" data-lang="en" aria-pressed="true">English</button><button class="langbtn" type="button" data-lang="es" aria-pressed="false">Español</button></span>
   <a class="btn sm" href="#book"><svg class="ic"><use href="#i-cal"/></svg><span data-es="Estimado gratis">Free estimate</span></a>
  </div>
@@ -1574,7 +1588,7 @@ body .sec.off{background-image:none!important}
   <div>
    <span class="bar-y"></span>
    <h2 data-es="Lo que hacemos">What we do</h2>
-   <p class="sub" data-es="Toca lo que necesitas — va directo a tu solicitud.">Tap what you need — it goes straight into your estimate request.</p>
+   <p class="sub" data-es="Toque lo que necesita. Va directo a su solicitud.">Tap what you need — it goes straight into your estimate request.</p>
   </div>
   <div class="tiles">
    <button class="tile-b" type="button" data-svc="Excavation"><span class="tic"><svg class="ic"><use href="#i-dig"/></svg></span><strong data-es="Excavación">Excavation</strong><em data-es="Cimientos, plataformas, albercas, estanques y servicios públicos.">Foundations, pads, pools, ponds and utilities.</em><span class="go"><span data-es="Agregar">Add to request</span><svg class="ic"><use href="#i-arrow"/></svg></span></button>
@@ -1669,7 +1683,7 @@ body .sec.off{background-image:none!important}
   <div>
    <span class="bar-y"></span>
    <h2 data-es="Valle de Phoenix. Lo cubrimos.">Phoenix valley. We cover it.</h2>
-   <p class="big" data-es="Trabajamos en todo el valle. Si no ves tu ciudad, escríbela en el formulario — casi seguro llegamos.">We work the whole valley. Don’t see your city? Put it in the form — we almost certainly cover it.</p>
+   <p class="big" data-es="Trabajamos en todo el valle. Si no ve su ciudad, escríbala en el formulario. Casi seguro llegamos.">We work the whole valley. Don’t see your city? Put it in the form — we almost certainly cover it.</p>
    <a class="btn ghost" href="#book"><span data-es="Pedir estimado">Get an estimate</span><svg class="ic"><use href="#i-arrow"/></svg></a>
   </div>
   <div class="cities">
@@ -1733,8 +1747,8 @@ body .sec.off{background-image:none!important}
 <section class="sec bridge rv">
   <div class="wrap" style="text-align:center;max-width:640px;margin:0 auto">
     <div class="bar-y" style="margin:0 auto 18px"></div>
-    <h2 data-es="¿Tienes medidas? Pide precio.">Got dimensions? Get a price.</h2>
-    <p class="lede" data-es="La calculadora es una guía. Nosotros vamos al sitio, medimos, vemos el acceso y te damos un número real.">The calculator is a guide. We come to the site, measure, check access, and give you a real number.</p>
+    <h2 data-es="¿Tiene medidas? Pida un precio.">Got dimensions? Get a price.</h2>
+    <p class="lede" data-es="La calculadora es una guía. Vamos al sitio, medimos, vemos el acceso y le damos un número real.">The calculator is a guide. We come to the site, measure, check access, and give you a real number.</p>
     <div class="acts" style="justify-content:center;margin-top:22px">
       <a class="btn" href="#book" data-es="Pedir estimado gratis">Get a free estimate</a>
       <a class="btn ghost" id="bCall" href="#" hidden>Call now</a>
@@ -1745,8 +1759,8 @@ body .sec.off{background-image:none!important}
  <div class="wrap est">
   <div>
    <span class="bar-y"></span>
-   <h2 data-es="Dinos qué necesitas.">Tell us what you need.</h2>
-   <p class="sub" data-es="Describe el trabajo. Respondemos rápido. Mientras más detalle, más preciso el número.">Describe the job. We reply fast. More detail = a better number.</p>
+   <h2 data-es="Díganos qué necesita.">Tell us what you need.</h2>
+   <p class="sub" data-es="Describa el trabajo. Respondemos rápido. Mientras más detalle, más preciso el número.">Describe the job. We reply fast. More detail = a better number.</p>
    <div class="badges">
     <div><svg class="ic"><use href="#i-bolt"/></svg><span data-es="Excavando desde 2003">Excavating since 2003</span></div>
     <div><svg class="ic"><use href="#i-bolt"/></svg><span data-es="Respondemos rápido">Fast reply</span></div>
@@ -1757,15 +1771,17 @@ body .sec.off{background-image:none!important}
     <a id="cPhoneEn" href="#" hidden></a>
     <a id="cPhoneEs" href="#" hidden></a>
     <a id="cWa" href="#" hidden></a>
-    <a id="cMail" href="#" hidden></a>
-    <a id="cMail2" href="#" hidden></a>
-    <a id="cMail3" href="#" hidden></a>
-    <a id="cFb" href="#" target="_blank" rel="noopener" hidden aria-label="Facebook page (opens in a new tab)">Facebook</a>
+    <a id="cMail" href="mailto:info@cdigs.bid"><span class="k" data-es="Info">Info</span><span class="v">info@cdigs.bid</span></a>
+    <a id="cMail2" href="mailto:adrian.man@cdigs.bid"><span class="k" data-es="Gerente">Manager</span><span class="v">adrian.man@cdigs.bid</span></a>
+    <a id="cMail3" href="mailto:jdurazo@cdigs.bid"><span class="k" data-es="Dueño">Owner</span><span class="v">jdurazo@cdigs.bid</span></a>
+    <a id="cMail4" href="mailto:cdsexcavation@gmail.com"><span class="k" data-es="Original">Original</span><span class="v">cdsexcavation@gmail.com</span></a>
+    <a id="cFb" href="https://www.facebook.com/profile.php?id=100064277851753" target="_blank" rel="noopener noreferrer" aria-label="Facebook page (opens in a new tab)">Facebook</a>
    </div>
    <img class="estphoto" src="img/equipment.jpg" alt="Our equipment: a Deere loader backhoe, a Cat mini excavator and a trailer" width="1200" height="635" decoding="async" onerror="this.onerror=null;this.style.display='none'">
   </div>
 
   <div class="formcard" id="book">
+  <p class="jobsite-sign"><span data-es="ESTIMADO GRATIS">Free estimate</span></p>
   <div class="bk-head"><h3 data-es="Reserve su estimado gratis">Book your free estimate</h3><p data-es="Elija un día y le confirmamos por mensaje o llamada. Toma un minuto.">Pick a day and we confirm by text or call. Takes a minute.</p></div>
   <form id="f" action="submit.php" method="post" novalidate>
    <div class="row2">
@@ -1861,10 +1877,11 @@ body .sec.off{background-image:none!important}
   <nav aria-label="Footer: contact"><ul class="fl">
    <li><a id="fPhoneEn" href="#" hidden></a></li>
    <li><a id="fPhoneEs" href="#" hidden></a></li>
-   <li><a id="fMail" href="#" hidden></a></li>
-   <li><a id="fMail2" href="#" hidden></a></li>
-   <li><a id="fMail3" href="#" hidden></a></li>
-   <li><a id="fFb" href="#" target="_blank" rel="noopener" hidden aria-label="Facebook page (opens in a new tab)">Facebook</a></li>
+   <li><a id="fMail" href="mailto:info@cdigs.bid"><span class="k" data-es="Info">Info</span><span class="v">info@cdigs.bid</span></a></li>
+   <li><a id="fMail2" href="mailto:adrian.man@cdigs.bid"><span class="k" data-es="Gerente">Manager</span><span class="v">adrian.man@cdigs.bid</span></a></li>
+   <li><a id="fMail3" href="mailto:jdurazo@cdigs.bid"><span class="k" data-es="Dueño">Owner</span><span class="v">jdurazo@cdigs.bid</span></a></li>
+   <li><a id="fMail4" href="mailto:cdsexcavation@gmail.com"><span class="k" data-es="Original">Original</span><span class="v">cdsexcavation@gmail.com</span></a></li>
+   <li><a id="fFb" href="https://www.facebook.com/profile.php?id=100064277851753" target="_blank" rel="noopener noreferrer" aria-label="Facebook page (opens in a new tab)">Facebook</a></li>
   </ul></nav>
  </div>
  <div class="fbot">
@@ -1917,7 +1934,7 @@ body .sec.off{background-image:none!important}
   <h2 id="privT" data-es="Política de privacidad">Privacy Policy</h2>
   <p data-es="Vigente desde el 28 de octubre de 2026.">Effective October 28, 2026.</p>
   <h3 data-es="Quiénes somos">Who we are</h3>
-  <p data-es="CD Services LLC es una empresa de excavación y nivelación de terreno en Phoenix, Arizona. Contacto: estimates.carranzadig@gmail.com, cdsexcavation@gmail.com o info@cdigs.bid.">CD Services LLC is an excavation and grading company in Phoenix, Arizona. Contact: estimates.carranzadig@gmail.com, cdsexcavation@gmail.com or info@cdigs.bid.</p>
+  <p data-es="CD Services LLC es una empresa de excavación y nivelación de terreno en Phoenix, Arizona. Contacto: info@cdigs.bid, adrian.man@cdigs.bid, jdurazo@cdigs.bid o cdsexcavation@gmail.com.">CD Services LLC is an excavation and grading company in Phoenix, Arizona. Contact: info@cdigs.bid, adrian.man@cdigs.bid, jdurazo@cdigs.bid or cdsexcavation@gmail.com.</p>
   <h3 data-es="Qué información recibimos">What we collect</h3>
   <p data-es="Solo lo que usted escribe en el formulario de estimado: nombre, teléfono, ciudad o zona, correo (opcional), el trabajo que necesita, cuándo lo necesita, cómo prefiere que le contactemos, el idioma y los detalles que agregue. También recibimos de qué página llegó a nuestro sitio, si su navegador la envía.">Only what you type into the estimate form: name, phone, city or area, email (optional), the work you need, when you need it, how you prefer to be contacted, your language and any details you add. We also receive the page you came from, if your browser sends it.</p>
   <h3 data-es="Para qué la usamos">How we use it</h3>
@@ -1935,7 +1952,7 @@ body .sec.off{background-image:none!important}
   <h3 data-es="Cuánto tiempo la guardamos">How long we keep it</h3>
   <p data-es="El tiempo necesario para atender su solicitud y llevar nuestros registros, y después la eliminamos o la dejamos sin identificar.">As long as needed to handle your request and keep our records, then we delete it or strip the identifying details.</p>
   <h3 data-es="Sus derechos">Your choices</h3>
-  <p data-es="Puede pedirnos ver, corregir o borrar su información, o dejar de contactarle, escribiendo a estimates.carranzadig@gmail.com, cdsexcavation@gmail.com o info@cdigs.bid. Este sitio no está dirigido a menores de 13 años.">You can ask us to see, correct or delete your information, or to stop contacting you, by writing to estimates.carranzadig@gmail.com, cdsexcavation@gmail.com or info@cdigs.bid. This site is not directed to children under 13.</p>
+  <p data-es="Puede pedirnos ver, corregir o borrar su información, o dejar de contactarle, escribiendo a info@cdigs.bid. Este sitio no está dirigido a menores de 13 años.">You can ask us to see, correct or delete your information, or to stop contacting you, by writing to info@cdigs.bid. This site is not directed to children under 13.</p>
   <h3 data-es="Cambios">Changes</h3>
   <p data-es="Si cambiamos esta política, publicaremos la nueva versión aquí con su fecha.">If we change this policy we will post the new version here with its date.</p>
  </div>
@@ -1949,9 +1966,11 @@ var SITE={
  phoneEn:"4809895802", phoneEnDisplay:"(480) 989-5802",   /* English line */
  phoneEs:"6235221923", phoneEsDisplay:"(623) 522-1923",   /* Spanish line */
  whatsapp:"6235221923",
- email:"estimates.carranzadig@gmail.com",  /* swap for an address on cdigs.bid once forwarding is set up */
- email2:"cdsexcavation@gmail.com",
- email3:"info@cdigs.bid",
+ email:"info@cdigs.bid",
+ email2:"adrian.man@cdigs.bid",
+ email3:"jdurazo@cdigs.bid",
+ email4:"cdsexcavation@gmail.com",
+ booked:"excavations@cdigs.bid",
  license:"",        /* e.g. "AZ ROC #123456", leave empty until confirmed */
  endpoint:"https://hook.us2.make.com/i2wgqspx78weeg4e98k22peqbxhnxi78"   /* Make webhook. Use "submit.php" instead if hosting runs PHP */
 };
@@ -2091,7 +2110,7 @@ $$('.langbtn').forEach(function(b){b.addEventListener('click',function(){setLang
 
 /* ---------- contact details from SITE ---------- */
 function mainPhone(){return lang==='es'?{n:SITE.phoneEs,d:SITE.phoneEsDisplay}:{n:SITE.phoneEn,d:SITE.phoneEnDisplay}}
-function put(id,href,text){var a=$('#'+id);if(!a)return;if(!href){a.hidden=true;return}a.hidden=false;a.href=href;var t=a.querySelector('span')||a;t.textContent=text}
+function put(id,href,text){var a=$('#'+id);if(!a)return;if(!href){a.hidden=true;return}a.hidden=false;a.href=href;var v=a.querySelector('.v');if(v){v.textContent=text;return}var t=a.querySelector('span')||a;t.textContent=text}
 function phoneUi(){
  var mp=mainPhone();
  var en=L('English: ','Inglés: ')+SITE.phoneEnDisplay,es='Español: '+SITE.phoneEsDisplay;
@@ -2110,6 +2129,8 @@ function phoneUi(){
  put('cMail3',SITE.email3&&'mailto:'+SITE.email3,SITE.email3);
  put('fMail2',SITE.email2&&'mailto:'+SITE.email2,SITE.email2);
  put('fMail3',SITE.email3&&'mailto:'+SITE.email3,SITE.email3);
+ put('cMail4',SITE.email4&&'mailto:'+SITE.email4,SITE.email4);
+ put('fMail4',SITE.email4&&'mailto:'+SITE.email4,SITE.email4);
 }
 if(SITE.license){$('#lic').textContent='· '+SITE.license}
 
@@ -2153,6 +2174,7 @@ form.addEventListener('submit',function(ev){
    else{
     var fd=new FormData(form),qs=new URLSearchParams();fd.forEach(function(v,k){if(k!=='website'&&k!=='ts')qs.append(k,v)});
     qs.append('received',new Date().toISOString());
+    qs.append('to',SITE.booked||'excavations@cdigs.bid');
     req=fetch(SITE.endpoint,{method:'POST',mode:'no-cors',body:qs}).then(function(){return{ok:true}});
    }
   }else{
@@ -2758,6 +2780,7 @@ if(window.drawShape)window.drawShape();
  var sun=sc.querySelector('.scn-sun'),shade=sc.querySelector('.scn-shade');
  var p=0,ticking=false,vh=innerHeight;
  function upd(){ticking=false;
+  if(document.hidden) return;
   var max=Math.max(1,document.documentElement.scrollHeight-innerHeight);p=Math.min(1,Math.max(0,(window.pageYOffset||0)/max));
   ls.forEach(function(l){var travel=(l.h-100)*l.k/2.0*1;l.el.style.transform='translate3d(0,'+(-p*travel*vh/100).toFixed(1)+'px,0)'});
   sun.style.transform='translate3d(0,'+(p*38).toFixed(1)+'vh,0) scale('+(1+p*.35).toFixed(2)+')';
@@ -2772,6 +2795,49 @@ if(window.drawShape)window.drawShape();
  size();
  window.__scene=function(v){sc.setAttribute('data-scene',v)};
  try{var q=new URLSearchParams(location.search).get('scene');if(q)sc.setAttribute('data-scene',q)}catch(e){}
+})();
+</script>
+<script>
+/* secret cleaner — hold the yard fence. also runs on its own. */
+(function(){
+ var root=document.documentElement;
+ function slow(){
+  try{var c=navigator.connection||navigator.mozConnection;if(c&&(c.saveData||c.effectiveType==='2g'||c.effectiveType==='slow-2g'))return true}catch(e){}
+  return false;
+ }
+ function lean(){
+  root.classList.add('cds-lean');
+  var v=document.getElementById('heroVid');
+  if(v){try{v.pause()}catch(e){} v.remove()}
+ }
+ if(slow()||(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)) lean();
+ document.addEventListener('visibilitychange',function(){
+  root.classList.toggle('cds-pause',document.hidden);
+  var v=document.getElementById('heroVid');
+  if(!v)return;
+  if(document.hidden) v.pause();
+  else if(!root.classList.contains('cds-lean')){var p=v.play();if(p&&p.catch)p.catch(function(){})}
+ });
+ var hero=document.querySelector('.hero');
+ if(hero&&'IntersectionObserver' in window){
+  new IntersectionObserver(function(entries){
+   var v=document.getElementById('heroVid'); if(!v) return;
+   if(!entries[0].isIntersecting) v.pause();
+   else if(!root.classList.contains('cds-lean')&&!document.hidden){var p=v.play();if(p&&p.catch)p.catch(function(){})}
+  },{threshold:.08}).observe(hero);
+ }
+ function tidy(){
+  var imgs=document.images,i;
+  for(i=0;i<imgs.length;i++){ if(!imgs[i].decoding) imgs[i].decoding='async'; }
+ }
+ if(window.requestIdleCallback) requestIdleCallback(tidy); else setTimeout(tidy,500);
+ var door=document.querySelector('.yard-door'),hold=0,held=false;
+ if(door){
+  door.addEventListener('pointerdown',function(){ held=false; clearTimeout(hold); hold=setTimeout(function(){held=true;lean()},800); });
+  door.addEventListener('pointerup',function(){ clearTimeout(hold); });
+  door.addEventListener('pointerleave',function(){ clearTimeout(hold); });
+  door.addEventListener('click',function(e){ if(held){ e.preventDefault(); e.stopPropagation(); held=false; } }, true);
+ }
 })();
 </script>
 </body>

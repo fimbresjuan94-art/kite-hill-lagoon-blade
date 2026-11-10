@@ -1,4 +1,4 @@
-export type Role = "developer" | "owner" | "dispatcher" | "estimator" | "operator" | "office";
+export type Role = "developer" | "owner" | "manager" | "dispatcher" | "estimator" | "operator" | "office";
 
 export type ModuleId =
   | "overview"
@@ -52,6 +52,7 @@ export type Staff = {
   id: string;
   name: string;
   role: Role;
+  email: string;
   pin: string;
   phone: string;
   certs: string[];
@@ -133,6 +134,7 @@ export type Job = {
   notes: string;
   checklist: CheckItem[];
   photos: { src: string; caption: string }[];
+  videos?: { id: string; caption: string }[];
   price: number;
   costLabor: number;
   costMaterials: number;

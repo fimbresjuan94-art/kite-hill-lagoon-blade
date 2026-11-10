@@ -18,11 +18,10 @@ export function Door() {
 
 function DoorForm() {
   const t = useT();
-  const staff = useRidge((s) => s.data.staff);
   const company = useRidge((s) => s.data.settings.company);
   const signIn = useRidge((s) => s.signIn);
-  const people = [...staff].sort((a, b) => (a.role === "developer" ? 1 : 0) - (b.role === "developer" ? 1 : 0));
-  const [id, setId] = useState(people.find((p) => p.role === "owner")?.id ?? people[0]?.id ?? "");
+  const tidy = useRidge((s) => s.tidy);
+  const [email, setEmail] = useState("");
   const [pin, setPin] = useState("");
   const [bad, setBad] = useState(false);
 
@@ -31,38 +30,38 @@ function DoorForm() {
       <img src="/brand/img/estrella.jpg" alt="" className="pointer-events-none absolute inset-x-0 top-0 -z-10 w-full h-auto" />
       <img src="/brand/img/logo.png" alt="" className="size-14 object-contain" />
       <div className="mt-4 flex items-center justify-between gap-3">
-        <p className="text-xs font-bold uppercase tracking-widest text-copper">El corral</p>
+        <p
+          className="text-xs font-bold uppercase tracking-widest text-copper"
+          onPointerDown={() => {
+            const id = window.setTimeout(() => tidy(), 800);
+            const up = () => {
+              window.clearTimeout(id);
+              window.removeEventListener("pointerup", up);
+            };
+            window.addEventListener("pointerup", up);
+          }}
+        >
+          El corral
+        </p>
         <LangButton />
       </div>
       <h1 className="mt-2 font-display text-5xl leading-none">CD Services</h1>
       <p className="mt-3 text-mist">
         <span data-no-es>{company}. </span>
-        <span>{t("Crew door, not the public site. PIN 2580.")}</span>
+        <span>{t("Sign in with your email. The password is not listed here.")}</span>
       </p>
       <form
         className="mt-8 space-y-3"
         onSubmit={(e) => {
           e.preventDefault();
-          const ok = signIn(id, pin);
+          const ok = signIn(email, pin);
           setBad(!ok);
           if (!ok) setPin("");
         }}
       >
-        <div className="grid gap-2">
-          {people.map((person) => (
-            <button
-              key={person.id}
-              type="button"
-              onClick={() => setId(person.id)}
-              className={`min-h-11 rounded-2xl px-4 text-left ring-1 ${id === person.id ? "bg-panel ring-copper" : "ring-line"}`}
-            >
-              <span className="block">{person.name}</span>
-              <span className="text-xs uppercase tracking-widest text-mist">{t(person.role)}</span>
-            </button>
-          ))}
-        </div>
-        <Input value={pin} onChange={(e) => setPin(e.target.value)} inputMode="numeric" placeholder="PIN" aria-label="PIN" />
-        {bad ? <p className="text-sm text-copper">{t("That PIN does not match.")}</p> : null}
+        <Input value={email} onChange={(e) => setEmail(e.target.value)} type="email" autoComplete="username" placeholder="Email" aria-label="Email" />
+        <Input value={pin} onChange={(e) => setPin(e.target.value)} type="password" autoComplete="current-password" placeholder="Password" aria-label="Password" />
+        {bad ? <p className="text-sm text-copper">{t("That sign-in does not match.")}</p> : null}
         <Btn type="submit" className="w-full">{t("Enter")}</Btn>
       </form>
       <Link to="/" className="mt-6 min-h-11 text-sm text-mist">{t("Back to the public site")}</Link>
@@ -80,32 +79,23 @@ export function Shell({ module, onNav }: { module: string; onNav: (m: ModuleId) 
 
 function ShellBody({ module, onNav }: { module: string; onNav: (m: ModuleId) => void }) {
   const t = useT();
-  const data = useRidge((s) => s.data);
+  const staff = useRidge((s) => s.data.staff);
+  const contacts = useRidge((s) => s.data.contacts);
   const sessionId = useRidge((s) => s.sessionId);
   const signOut = useRidge((s) => s.signOut);
-  const me = data.staff.find((s) => s.id === sessionId);
+  const me = staff.find((s) => s.id === sessionId);
   const menu = navFor(me?.role);
   const active = allowed(me?.role, module) ? (module as ModuleId) : "overview";
   const write = canWrite(me?.role, active);
-  const stepClosers = useRidge((s) => s.stepClosers);
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState("");
   const hits = useMemo(() => {
     const query = q.trim().toLowerCase();
     if (!query) return [];
     const mods = menu.flatMap((group) => group.items).filter((item) => item.label.toLowerCase().includes(query)).slice(0, 4);
-    const people = data.contacts.filter((c) => c.name.toLowerCase().includes(query)).slice(0, 4);
+    const people = contacts.filter((c) => c.name.toLowerCase().includes(query)).slice(0, 4);
     return { mods, people };
-  }, [q, data.contacts, menu]);
-
-  useEffect(() => {
-    const first = window.setTimeout(() => stepClosers(), 900);
-    const id = window.setInterval(() => stepClosers(), 8000);
-    return () => {
-      window.clearTimeout(first);
-      window.clearInterval(id);
-    };
-  }, [stepClosers]);
+  }, [q, contacts, menu]);
 
   const nav = (
     <div className="flex h-full flex-col bg-soil">

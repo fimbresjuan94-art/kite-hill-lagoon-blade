@@ -6,9 +6,15 @@ import { Costing, Dispatch, Equipment, Estimates, Jobs, Permits, Photos, PriceBo
 import { Ads, Forms, Funnels, Sites, Social } from "@/components/ridge/grow";
 import { Companies, Contacts, Lists, Pipeline, Tasks } from "@/components/ridge/people";
 import { CalendarScreen, Calls, Campaigns, Inbox, Reviews } from "@/components/ridge/talk";
+import { watchPage } from "@/lib/ridge/battalion";
 import type { ModuleId } from "@/lib/ridge/types";
+import { useEffect } from "react";
 
 export function Screen({ id, onNav }: { id: ModuleId; onNav: (m: ModuleId) => void }) {
+  useEffect(() => {
+    watchPage(id);
+    return () => watchPage(null);
+  }, [id]);
   switch (id) {
     case "overview": return <Overview onNav={onNav} />;
     case "closers": return <ClosersFloor onNav={onNav} />;

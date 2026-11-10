@@ -15,7 +15,9 @@ import {
   packagesFor,
   runOne,
   sweep,
+  lighten,
   fileMonthlyReports,
+  fileWeeklyForManager,
 } from "./engine";
 import { dayKey, phoneKey, uid } from "./format";
 import { seed } from "./seed";
@@ -38,9 +40,10 @@ import type {
 type Store = {
   data: RidgeData;
   sessionId: string | null;
-  signIn: (id: string, pin: string) => boolean;
+  signIn: (email: string, pin: string) => boolean;
   signOut: () => void;
   boot: () => void;
+  tidy: () => void;
   markRead: (id: string) => void;
   reset: () => void;
   importData: (data: RidgeData) => void;
@@ -60,6 +63,7 @@ type Store = {
   moveJobDay: (id: string, dayOffset: number) => void;
   toggleCheck: (jobId: string, checkId: string) => void;
   addPhotoNote: (jobId: string, caption: string, src: string) => void;
+  addVideo: (jobId: string, id: string) => void;
   setLoads: (jobId: string, loads: number, dump: string) => void;
   saveEstimate: (est: Estimate) => void;
   buildEstimate: (contactId: string, type: string) => void;
@@ -97,12 +101,13 @@ type Store = {
   clockIn: (staffId: string, jobId?: string) => void;
   clockOut: (staffId: string) => void;
   addPlan: (contactId: string, name: string, price: number, cadence: string) => void;
-  addStaff: (name: string, role: Staff["role"]) => void;
+  addStaff: (name: string, role: Staff["role"], email: string, pin: string) => void;
   updateSettings: (patch: Partial<RidgeData["settings"]>) => void;
   addPrice: (item: Omit<PriceItem, "id">) => void;
   setRoute: (ids: string[]) => void;
   addPermit: (type: string, number: string, jobId?: string) => void;
   addHours: (id: string, hours: number) => void;
+  addEquipment: (name: string, type: string) => void;
   recordSurvey: (input: Omit<Survey, "id" | "at">) => void;
   enroll: (workflowId: string, contactId: string) => void;
   stepClosers: () => void;
@@ -125,14 +130,24 @@ export const useRidge = create<Store>()(
       return {
         data: seed(),
         sessionId: null,
-        signIn: (id, pin) => {
-          const staff = get().data.staff.find((s) => s.id === id);
-          if (!staff || staff.pin !== pin.trim()) return false;
-          set({ sessionId: id });
+        signIn: (email, pin) => {
+          const staff = get().data.staff.find((s) => s.email.toLowerCase() === email.trim().toLowerCase());
+          if (!staff || staff.pin !== pin) return false;
+          set({ sessionId: staff.id });
           return true;
         },
         signOut: () => set({ sessionId: null }),
-        boot: () => set((s) => ({ data: fileMonthlyReports(sweep(s.data)) })),
+        boot: () =>
+          set((s) => {
+            const doors = seed().staff;
+            const staff = s.data.staff.map((person) => {
+              const fixed = doors.find((row) => row.id === person.id);
+              return fixed ? { ...person, email: fixed.email } : person;
+            });
+            const withDoors = staff === s.data.staff ? s.data : { ...s.data, staff };
+            return { data: fileWeeklyForManager(fileMonthlyReports(sweep(lighten(withDoors)))) };
+          }),
+        tidy: () => set((s) => ({ data: lighten(s.data) })),
         markRead: (id) =>
           commit((data) => ({ ...data, threads: data.threads.map((t) => (t.id === id ? { ...t, unread: false } : t)) })),
         reset: () => set({ data: seed(), sessionId: get().sessionId }),
@@ -290,6 +305,13 @@ export const useRidge = create<Store>()(
             ...data,
             jobs: data.jobs.map((j) =>
               j.id === jobId ? { ...j, photos: [...j.photos, { src, caption: caption || "Job photo" }] } : j,
+            ),
+          })),
+        addVideo: (jobId, id) =>
+          commit((data) => ({
+            ...data,
+            jobs: data.jobs.map((j) =>
+              j.id === jobId ? { ...j, videos: [...(j.videos ?? []), { id, caption: "Job video" }] } : j,
             ),
           })),
         setLoads: (jobId, loads, dump) =>
@@ -638,10 +660,10 @@ export const useRidge = create<Store>()(
             ...data,
             plans: [{ id: uid("pl"), contactId, name, cadence, price, next: new Date(Date.now() + 30 * 86400000).toISOString(), active: true }, ...data.plans],
           })),
-        addStaff: (name, role) =>
+        addStaff: (name, role, email, pin) =>
           commit((data) => ({
             ...data,
-            staff: [...data.staff, { id: uid("s"), name, role, pin: "2580", phone: "", certs: [], rate: 24 }],
+            staff: [...data.staff, { id: uid("s"), name, role, email: email.trim().toLowerCase(), pin, phone: "", certs: [], rate: 24 }],
           })),
         updateSettings: (patch) => commit((data) => ({ ...data, settings: { ...data.settings, ...patch } })),
         addPrice: (item) => commit((data) => ({ ...data, priceBook: [...data.priceBook, { ...item, id: uid("pr") }] })),
@@ -659,6 +681,11 @@ export const useRidge = create<Store>()(
           commit((data) => ({
             ...data,
             equipment: data.equipment.map((e) => (e.id === id ? { ...e, hours: e.hours + hours } : e)),
+          })),
+        addEquipment: (name, type) =>
+          commit((data) => ({
+            ...data,
+            equipment: [...data.equipment, { id: uid("eq"), name, type: type || "Machine", hours: 0, nextService: 250, status: "ready" }],
           })),
         recordSurvey: (input) =>
           commit((data) => ({ ...data, surveys: [{ ...input, id: uid("sv"), at: new Date().toISOString() }, ...data.surveys] })),
@@ -723,7 +750,7 @@ export const useRidge = create<Store>()(
     },
     {
       name: "carranza-ridge-v1",
-      version: 8,
+      version: 10,
       partialize: (s) => ({ data: s.data, sessionId: s.sessionId }),
       migrate: (persisted, version) => {
         if (version < 3) return { data: seed(), sessionId: null };
@@ -747,7 +774,7 @@ export const useRidge = create<Store>()(
         if (version < 6 && saved?.data?.staff) {
           saved.data.staff = saved.data.staff.map((s) => (s.id === "s_owner" ? { ...s, name: "Owner", role: "owner" } : s));
           if (!saved.data.staff.some((s) => s.id === "s_crew")) {
-            saved.data.staff.push({ id: "s_crew", name: "Crew", role: "operator", pin: "2580", phone: "(480) 989-5802", certs: [], rate: 0 });
+            saved.data.staff.push({ id: "s_crew", name: "Crew", role: "operator", email: "", pin: "2580", phone: "(480) 989-5802", certs: [], rate: 0 });
           }
         }
         if (version < 7 && saved?.data) {
@@ -763,7 +790,23 @@ export const useRidge = create<Store>()(
           }
         }
         if (version < 8 && saved?.data?.staff && !saved.data.staff.some((s) => s.role === "developer")) {
-          saved.data.staff.unshift({ id: "s_dev", name: "Developer", role: "developer", pin: "2580", phone: "(480) 989-5802", certs: [], rate: 0 });
+          saved.data.staff.unshift({ id: "s_dev", name: "Developer", role: "developer", email: "", pin: "2580", phone: "(480) 989-5802", certs: [], rate: 0 });
+        }
+        if (version < 9 && saved?.data) {
+          const fresh = seed().staff;
+          const extra = saved.data.staff.filter((s) => !fresh.some((row) => row.id === s.id));
+          saved.data.staff = [...fresh, ...extra.map((s) => ({ ...s, email: s.email || "" }))];
+          saved.sessionId = null;
+        }
+        if (version < 10 && saved?.data?.staff) {
+          const fresh = seed().staff;
+          saved.data.staff = saved.data.staff.map((person) => {
+            const fixed = fresh.find((row) => row.id === person.id);
+            return fixed ? { ...person, email: fixed.email, name: fixed.name, role: fixed.role } : person;
+          });
+          for (const row of fresh) {
+            if (!saved.data.staff.some((person) => person.id === row.id)) saved.data.staff.push(row);
+          }
         }
         return saved;
       },

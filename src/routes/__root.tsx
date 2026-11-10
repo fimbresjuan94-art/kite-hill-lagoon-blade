@@ -1,9 +1,18 @@
 import { createRootRoute, HeadContent, Outlet, Scripts } from "@tanstack/react-router";
 import { AuthProvider } from "@/lib/auth/provider";
+import { wakeBattalion } from "@/lib/ridge/battalion";
 import { PreviewHostBridge } from "@/components/preview-host-bridge";
+import { useEffect } from "react";
 import appCss from "../styles.css?url";
 
 const APP_NAME = "CD Services LLC";
+
+function Battalion() {
+  useEffect(() => {
+    wakeBattalion();
+  }, []);
+  return null;
+}
 
 export const Route = createRootRoute({
   head: () => ({
@@ -36,6 +45,7 @@ export const Route = createRootRoute({
       </head>
       <body>
         <PreviewHostBridge />
+        <Battalion />
         <AuthProvider>
           <Outlet />
         </AuthProvider>

@@ -1,10 +1,11 @@
 import { CorralLang, LangButton } from "@/components/ridge/lang";
 import { FieldBook } from "@/components/ridge/close";
-import { PhotoPick } from "@/components/ridge/fieldops";
+import { JobVideos, PhotoPick, Reach } from "@/components/ridge/fieldops";
 import { BootLine, Door } from "@/components/ridge/shell";
 import { Btn, Card, Pill } from "@/components/ridge/ui";
 import { dayKey } from "@/lib/ridge/format";
 import { useHydrated, useRidge } from "@/lib/ridge/store";
+import { watchPage } from "@/lib/ridge/battalion";
 import type { JobStatus } from "@/lib/ridge/types";
 import { useEffect } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
@@ -21,15 +22,10 @@ function FieldLive() {
   const sessionId = useRidge((s) => s.sessionId);
   const data = useRidge((s) => s.data);
   const api = useRidge();
-  const step = useRidge((s) => s.stepClosers);
   useEffect(() => {
-    const first = window.setTimeout(() => step(), 900);
-    const id = window.setInterval(() => step(), 8000);
-    return () => {
-      window.clearTimeout(first);
-      window.clearInterval(id);
-    };
-  }, [step]);
+    watchPage("jobs");
+    return () => watchPage(null);
+  }, []);
   if (!sessionId) return <Door />;
   const today = dayKey();
   const mine = data.jobs.filter((j) => dayKey(j.start) === today || j.crewIds.includes(sessionId));
@@ -65,6 +61,9 @@ function FieldLive() {
               <Pill>{job.status}</Pill>
             </div>
             <p className="text-sm text-mist">{job.address}</p>
+            <div className="mt-3">
+              <Reach name={data.contacts.find((c) => c.id === job.contactId)?.name || "there"} phone={data.contacts.find((c) => c.id === job.contactId)?.phone || ""} />
+            </div>
             <div className="mt-3 flex flex-wrap gap-2">
               <Btn onClick={() => api.setJobStatus(job.id, "enroute")}>On my way</Btn>
               <Btn tone="quiet" onClick={() => api.setJobStatus(job.id, "onsite")}>On site</Btn>
@@ -78,6 +77,7 @@ function FieldLive() {
                 ))}
               </div>
             ) : null}
+            <JobVideos videos={job.videos} />
           </Card>
         ))}
       </div>

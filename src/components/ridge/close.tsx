@@ -78,7 +78,7 @@ export function ClosersFloor({ onNav }: { onNav?: (m: ModuleId) => void }) {
       action={<Btn onClick={() => api.stepClosers()}>{data.settings.closersLive ? "Work the next lead" : "Floor is paused"}</Btn>}
     >
       <p className="text-sm text-mist">
-        These four are names on the book, not a live phone, a live text line, or a live video call. They file a real request and write the words in the inbox. Nothing leaves this yard until a phone carrier is connected.
+        Chente is the call button. Chayo is the Spanish text. Neto is the English text. Tavo is the video on the job. Each one opens the phone you are holding. A new request also leaves their words in the inbox.
       </p>
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         {closers.map((c) => {
@@ -90,7 +90,7 @@ export function ClosersFloor({ onNav }: { onNav?: (m: ModuleId) => void }) {
                 <Pill hot={c.status === "on"}>{c.status === "on" ? "live" : "paused"}</Pill>
               </div>
               <p className="text-sm text-mist">
-                {c.channel === "phone" ? "Call list. Does not dial." : c.channel === "sms" ? "Spanish text draft. Does not send a real text." : c.channel === "video" ? "No video call yet." : "Chat draft in the inbox. Not a live chat window."}
+                {c.channel === "phone" ? "Opens the phone dialer." : c.channel === "sms" ? "Opens Messages in Spanish." : c.channel === "video" ? "Records on the job from the phone camera." : "Opens Messages in English."}
               </p>
               <p className="mt-2 text-sm">{mine} estimates on the book · cap {c.capPerHour}/hr</p>
               <Btn className="mt-3" tone="quiet" onClick={() => api.toggleCloser(c.id)}>{c.status === "on" ? "Pause" : "Wake"}</Btn>

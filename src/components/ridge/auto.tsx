@@ -127,22 +127,37 @@ export function Team() {
   const data = useRidge((s) => s.data);
   const add = useRidge((s) => s.addStaff);
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [role, setRole] = useState<Role>("operator");
+  const [made, setMade] = useState("");
   const rows = commissions(data);
   return (
     <Page kicker="People" title="Team">
-      <form className="mb-3 flex flex-wrap gap-2" onSubmit={(e) => { e.preventDefault(); if (!name) return; add(name, role); setName(""); }}>
+      <form
+        className="mb-3 flex flex-wrap gap-2"
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (!name || !email) return;
+          const pin = Math.random().toString(36).slice(2, 6) + "-" + Math.random().toString(36).slice(2, 6);
+          add(name, role, email, pin);
+          setMade(`${email.trim().toLowerCase()} · ${pin}`);
+          setName("");
+          setEmail("");
+        }}
+      >
         <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Name" aria-label="Name" />
+        <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" aria-label="Email" type="email" />
         <Select value={role} onChange={(e) => setRole(e.target.value as Role)} aria-label="Role">
-          {["developer", "owner", "dispatcher", "estimator", "operator", "office"].map((r) => <option key={r}>{r}</option>)}
+          {["operator", "manager", "owner"].map((r) => <option key={r} value={r}>{r}</option>)}
         </Select>
         <Btn type="submit">Add</Btn>
       </form>
+      {made ? <p className="mb-3 text-sm text-copper">Give this once, then it leaves this screen. {made}</p> : null}
       <div className="grid gap-3 md:grid-cols-2">
         {data.staff.map((person) => (
           <Card key={person.id}>
             <p className="font-display text-2xl">{person.name}</p>
-            <p className="text-sm text-mist">{person.role} · PIN {person.pin} · {person.phone || "no phone"}</p>
+            <p className="text-sm text-mist">{person.role}</p>
             <p className="mt-2 text-sm">{person.certs.length ? person.certs.join(" · ") : "No certs on file"}</p>
             <p className="text-sm text-copper">Commission pool {money(rows.find((r) => r.name === person.name)?.amount ?? 0)}</p>
           </Card>

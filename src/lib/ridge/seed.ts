@@ -6,9 +6,10 @@ const owner = "s_owner";
 export function seed(): RidgeData {
   return {
     staff: [
-      { id: "s_dev", name: "Developer", role: "developer", pin: "2580", phone: "(480) 989-5802", certs: [], rate: 0 },
-      { id: owner, name: "Owner", role: "owner", pin: "2580", phone: "(480) 989-5802", certs: [], rate: 0 },
-      { id: "s_crew", name: "Crew", role: "operator", pin: "2580", phone: "(480) 989-5802", certs: [], rate: 0 },
+      { id: "s_dev", name: "JP", role: "developer", email: "jpshadowcraft@cdigs.bid", pin: "K7m-Shadow-4Q", phone: "", certs: [], rate: 0 },
+      { id: owner, name: "Owner", role: "owner", email: "jdurazo@cdigs.bid", pin: "R2v-Yard-9L", phone: "", certs: [], rate: 0 },
+      { id: "s_mgr", name: "Adrian", role: "manager", email: "adrian.man@cdigs.bid", pin: "H5t-Field-8W", phone: "", certs: [], rate: 0 },
+      { id: "s_crew", name: "Crew", role: "operator", email: "crew@cdigs.bid", pin: "N3p-Truck-1C", phone: "", certs: [], rate: 0 },
     ],
     companies: [],
     contacts: [],

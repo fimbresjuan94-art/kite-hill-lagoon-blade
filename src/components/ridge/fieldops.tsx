@@ -2,8 +2,9 @@ import { Btn, Card, Field, Input, Page, Pill, Select, usePlain } from "@/compone
 import { estimateTotal, jobMargin, miles, optimize } from "@/lib/ridge/engine";
 import { dayKey, dayLabel, money } from "@/lib/ridge/format";
 import { todayOffset, useRidge } from "@/lib/ridge/store";
+import { loadClip, saveClip, smsHref, spanishText, englishText, telHref } from "@/lib/ridge/media";
 import type { Job, JobStatus } from "@/lib/ridge/types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const STATUSES: JobStatus[] = ["unscheduled", "scheduled", "enroute", "onsite", "hold", "done", "invoiced"];
 
@@ -320,8 +321,24 @@ export function Costing() {
 export function Equipment() {
   const gear = useRidge((s) => s.data.equipment);
   const addHours = useRidge((s) => s.addHours);
+  const addEquipment = useRidge((s) => s.addEquipment);
+  const [name, setName] = useState("");
+  const [type, setType] = useState("Machine");
   return (
     <Page kicker="Fleet" title="Equipment">
+      <form
+        className="mb-3 flex flex-wrap gap-2"
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (!name.trim()) return;
+          addEquipment(name.trim(), type.trim() || "Machine");
+          setName("");
+        }}
+      >
+        <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Machine" aria-label="Machine" />
+        <Input value={type} onChange={(e) => setType(e.target.value)} placeholder="Type" aria-label="Type" />
+        <Btn type="submit">Add</Btn>
+      </form>
       <div className="grid gap-3 md:grid-cols-3">
         {gear.map((eq) => (
           <Card key={eq.id}>
@@ -390,6 +407,74 @@ export function TimeClock() {
   );
 }
 
+export function Reach({ name, phone }: { name: string; phone: string }) {
+  const call = telHref(phone);
+  const es = smsHref(phone, spanishText(name));
+  const en = smsHref(phone, englishText(name));
+  if (!call) return null;
+  const btn = "inline-flex min-h-[52px] items-center rounded-[10px] px-4 font-extrabold";
+  return (
+    <div className="flex flex-wrap gap-2">
+      <a className={`${btn} bg-copper text-copper-ink`} href={call}>Call</a>
+      <a className={`${btn} bg-panel text-bone`} href={es}>Text · Spanish</a>
+      <a className={`${btn} bg-panel text-bone`} href={en}>Text · English</a>
+    </div>
+  );
+}
+
+export function VideoPick({ jobId }: { jobId: string }) {
+  const add = useRidge((s) => s.addVideo);
+  return (
+    <label className="inline-flex min-h-[52px] cursor-pointer items-center rounded-[10px] bg-panel px-5 font-extrabold text-bone">
+      Video
+      <input
+        type="file"
+        accept="video/*"
+        capture="environment"
+        className="sr-only"
+        onChange={(e) => {
+          const file = e.target.files?.[0];
+          e.currentTarget.value = "";
+          if (!file) return;
+          const id = `vid_${Date.now()}`;
+          void saveClip(id, file).then(() => add(jobId, id));
+        }}
+      />
+    </label>
+  );
+}
+
+export function JobVideos({ videos }: { videos?: { id: string }[] }) {
+  const [urls, setUrls] = useState<{ id: string; url: string }[]>([]);
+  useEffect(() => {
+    let dead = false;
+    const made: string[] = [];
+    void (async () => {
+      const next: { id: string; url: string }[] = [];
+      for (const clip of videos ?? []) {
+        const blob = await loadClip(clip.id);
+        if (!blob) continue;
+        const url = URL.createObjectURL(blob);
+        made.push(url);
+        next.push({ id: clip.id, url });
+      }
+      if (!dead) setUrls(next);
+    })();
+    return () => {
+      dead = true;
+      made.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, [videos]);
+  if (!urls.length) return null;
+  return (
+    <div className="mt-3 grid gap-2">
+      {urls.map((clip) => (
+        <video key={clip.id} src={clip.url} controls playsInline className="w-full rounded-lg" />
+      ))}
+    </div>
+  );
+}
+
 export function PhotoPick({ jobId }: { jobId: string }) {
   const add = useRidge((s) => s.addPhotoNote);
   async function take(file?: File) {
@@ -422,6 +507,7 @@ export function PhotoPick({ jobId }: { jobId: string }) {
         Gallery
         <input type="file" accept="image/*" className="sr-only" onChange={(e) => { void take(e.target.files?.[0]); e.currentTarget.value = ""; }} />
       </label>
+      <VideoPick jobId={jobId} />
     </div>
   );
 }
@@ -437,6 +523,7 @@ export function Photos() {
             <p className="font-display text-2xl">{job.title}</p>
             <p className="text-sm text-mist">{job.address}</p>
             <div className="mt-3"><PhotoPick jobId={job.id} /></div>
+            <JobVideos videos={job.videos} />
             <div className="mt-3 grid gap-3 sm:grid-cols-2">
               {job.photos.map((photo, index) => (
                 <figure key={`${photo.caption}-${index}`}>
