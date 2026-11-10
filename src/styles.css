@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Public Sans", system-ui, sans-serif;
+  --font-display: "Archivo", system-ui, sans-serif;
+  --color-ink: #0e1013;
+  --color-soil: #15181c;
+  --color-panel: #1e2328;
+  --color-line: #3a424b;
+  --color-bone: #f2f4f6;
+  --color-mist: #aeb7be;
+  --color-copper: #f6b91a;
+  --color-copper-ink: #14110a;
+  --shadow-border: 0 0 0 1px rgba(255, 255, 255, 0.13);
+  --shadow-border-hover: 0 0 0 1px #f6b91a;
+}
+
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  html,
+  body {
+    background: var(--color-ink);
+    color: var(--color-bone);
+    font-family: var(--font-sans);
+    min-height: 100%;
+  }
+
+  body {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .font-display {
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    line-height: 1.05;
+  }
+
+  ::selection {
+    background: var(--color-copper);
+    color: var(--color-copper-ink);
+  }
+}
+
+@utility card {
+  background: var(--color-soil);
+  box-shadow: var(--shadow-border);
+  border-radius: 10px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+.guide-bug {
+  width: 14px;
+  height: 10px;
+  border-radius: 70% 30% 70% 30%;
+  animation: guide-off 2s ease-in forwards;
+}
+
+@keyframes guide-off {
+  0% { transform: translate(-30vw, 8px); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translate(40vw, -48px); opacity: 0; }
+}

@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      @font-face {
+        font-family: "Oswald";
+        src: url("Oswald-Bold.ttf") format("truetype");
+        font-weight: 700;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "Barlow Condensed";
+        src: url("BarlowCondensed-SemiBold.ttf") format("truetype");
+        font-weight: 600;
+        font-style: normal;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+        background: #141210;
+      }
+      .card {
+        position: relative;
+        width: 1200px;
+        height: 630px;
+        background:
+          radial-gradient(ellipse 90% 70% at 50% 36%, #2a241e 0%, #1e1a16 42%, #141210 78%);
+        overflow: hidden;
+      }
+      .earth {
+        position: absolute;
+        inset: 0;
+        width: 1200px;
+        height: 630px;
+      }
+      .lockup {
+        position: absolute;
+        left: 120px;
+        right: 120px;
+        top: 108px;
+        text-align: center;
+        color: #f4efe6;
+      }
+      .eyebrow {
+        font-family: "Barlow Condensed", "Liberation Sans Narrow", sans-serif;
+        font-weight: 600;
+        font-size: 20px;
+        letter-spacing: 0.42em;
+        color: #e08a3c;
+        line-height: 1;
+        padding-left: 0.42em;
+      }
+      h1 {
+        margin-top: 22px;
+        font-family: "Oswald", "Liberation Sans Narrow", sans-serif;
+        font-weight: 700;
+        font-size: 168px;
+        line-height: 0.86;
+        letter-spacing: 0.045em;
+        color: #f4efe6;
+        padding-left: 0.045em;
+      }
+      .tag {
+        margin-top: 22px;
+        font-family: "Barlow Condensed", "Liberation Sans Narrow", sans-serif;
+        font-weight: 600;
+        font-size: 28px;
+        letter-spacing: 0.36em;
+        color: #f4efe6;
+        line-height: 1;
+        padding-left: 0.36em;
+        opacity: 0.92;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <svg class="earth" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="soil" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#3a322a" />
+            <stop offset="0.22" stop-color="#2a241c" />
+            <stop offset="0.55" stop-color="#1e1a16" />
+            <stop offset="1" stop-color="#141210" />
+          </linearGradient>
+          <linearGradient id="wallL" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#e08a3c" />
+            <stop offset="1" stop-color="#a86428" />
+          </linearGradient>
+        </defs>
+        <path d="M0 418 H1200 V630 H0 Z" fill="url(#soil)" />
+        <path d="M0 468 H1200" stroke="#f4efe6" stroke-opacity="0.07" />
+        <path d="M0 514 H1200" stroke="#e08a3c" stroke-opacity="0.18" />
+        <path d="M0 562 H1200" stroke="#f4efe6" stroke-opacity="0.06" />
+        <path d="M0 418 H1200" stroke="#f4efe6" stroke-opacity="0.42" stroke-width="2" />
+        <path d="M448 418 L600 552 L752 418 Z" fill="#141210" />
+        <path d="M448 418 L600 552" fill="none" stroke="url(#wallL)" stroke-width="4" stroke-linejoin="miter" />
+        <path d="M600 552 L752 418" fill="none" stroke="#e08a3c" stroke-width="3" stroke-opacity="0.72" />
+        <path d="M468 430 L592 546" fill="none" stroke="#e08a3c" stroke-width="1.5" stroke-opacity="0.35" />
+      </svg>
+      <div class="lockup">
+        <div class="eyebrow">CARRANZA DIG SERVICES</div>
+        <h1>RIDGE</h1>
+        <div class="tag">EXCAVATION COMMAND</div>
+      </div>
+    </div>
+  </body>
+</html>

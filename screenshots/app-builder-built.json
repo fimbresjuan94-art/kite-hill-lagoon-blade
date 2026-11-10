@@ -1,0 +1,38 @@
+{
+  "url": "http://127.0.0.1:8081/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "Ridge · Carranza Dig",
+      "hasCanvas": false,
+      "bodyTextLen": 962,
+      "bodyTextHash": "6463196ad986004860081b2c44814bd1090b6552621bd6fdbc1f0ad458d31a2b",
+      "bodyTextPrefix": "R Ridge Carranza Dig Book Portal Admin PUERTO PEÑASCO · SONORA W",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-built.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "Ridge · Carranza Dig",
+      "hasCanvas": false,
+      "bodyTextLen": 962,
+      "bodyTextHash": "6463196ad986004860081b2c44814bd1090b6552621bd6fdbc1f0ad458d31a2b",
+      "bodyTextPrefix": "R Ridge Carranza Dig Book Portal Admin PUERTO PEÑASCO · SONORA W",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-built-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-built.json",
+  "divergesFromBaseline": false,
+  "baselineReasons": []
+}
